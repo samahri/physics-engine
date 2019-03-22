@@ -1,0 +1,9 @@
+.App {
+    text-align: center;
+    margin: 50px auto;
+    max-width: 1296px;
+}
+.CanvasElement {
+	border: 1px solid;
+	margin-right: 10px;
+}

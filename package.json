@@ -1,0 +1,32 @@
+{
+  "name": "physcis_sim",
+  "version": "1.0.0",
+  "description": "a physics simulation engine on html canvas and javascript",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "package": "webpack"
+  },
+  "author": "Sam Saud Almahri",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^11.11.5",
+    "@types/react": "^16.8.8",
+    "@types/react-dom": "^16.8.3",
+    "css-loader": "^2.1.1",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "style-loader": "^0.23.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "@babel/preset-react": "^7.0.0",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-loader": "^8.0.5",
+    "typescript": "^3.3.4000",
+    "typings-for-css-modules-loader": "^1.7.0",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
+  }
+}
