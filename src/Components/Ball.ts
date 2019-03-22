@@ -1,26 +1,20 @@
 import Drawable from "./drawable";
 import Vector2D from "./Vector2d";
+import Particle from "./Particle";
 
-class Ball implements Drawable{
+class Ball extends Particle implements Drawable{
     private radius : number;
     private color: string;
-    private mass: number;
-    private pos: Vector2D;
-    private velo: Vector2D;
-    private acc:Vector2D;
-    private t = 0;
-
+    
     constructor(radius:number,
                 x: number,
                 y: number,
                 vx: number,
                 vy: number,
                 mass:number) {
+        super(x, y, vx, vy, 0, 0, mass);
         this.radius = radius;
         this.color = '#0000ff';
-        this.pos = new Vector2D(x, y);
-        this.velo = new Vector2D(vx,vy);
-        this.acc = new Vector2D(0,0)
     }
 
     public onEachStep(dt:number, forces: Vector2D) {
@@ -28,8 +22,6 @@ class Ball implements Drawable{
         this.pos.add(this.velo.clone().multiplyScalar(dt));
         this.acc = forces;
         this.velo.add(this.acc.clone().multiplyScalar(dt));
-        this.t+=dt;
-        console.log(`x = ${this.pos.x}`);
         
         if (this.pos.y > 500 - this.radius) {
             
