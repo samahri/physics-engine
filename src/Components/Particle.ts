@@ -4,9 +4,9 @@ abstract class Particle {
     protected pos: Vector2D;
     protected velo: Vector2D;
     protected acc:Vector2D;
-    protected mass: number;
+    private _mass: number;
 
-    constructor(x: number,
+    protected constructor(x: number,
                 y: number,
                 vx: number,
                 vy: number,
@@ -17,7 +17,11 @@ abstract class Particle {
         this.pos = new Vector2D(x, y);
         this.velo = new Vector2D(vx,vy);
         this.acc = new Vector2D(ax,ay);
-        this.mass = mass;
+        this._mass = mass;
+    }
+
+    get mass() {
+        return this._mass;
     }
 }
 

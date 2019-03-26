@@ -7,17 +7,17 @@ class AnimationUniverse {
     private readonly context: CanvasRenderingContext2D;
     private balls:Ball[] = [];
     private t0:number = new Date().getTime();
-    private g:Vector2D;
+    private g:number;
 
     constructor(context: CanvasRenderingContext2D) {
       this.context = context;
-      this.g = new Vector2D(data.g.x, data.g.y);
+      this.g = data.g;
       
   }
 
   public startAnimation() {
-    this.balls.push(new Ball(20, 200, 50, 0, 0, 15));
-    this.balls.push(new Ball(40, 100, 200, 0, 0, 50));
+    this.balls.push(new Ball(50, 200, 50, 0, 0, 15));
+    this.balls.push(new Ball(50, 400, 50, 0, 0, 15));
     this.doStartAnimation();
   }
 
@@ -27,10 +27,10 @@ class AnimationUniverse {
     this.context.clearRect(0, 0, data.canvas.width, data.canvas.height);
 
     for(var i = 0; i < this.balls.length; i++) {
-      this.balls[i].onEachStep(dt, this.g);
+      this.balls[i].onEachStep(dt, this.g, 20);
       this.balls[i].draw(this.context);
     }
-    
+
     window.requestAnimationFrame(() => this.doStartAnimation());
   }
 
