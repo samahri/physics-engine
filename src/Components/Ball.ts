@@ -1,7 +1,7 @@
 import Drawable from "./drawable";
 import Vector2D from "./Vector2d";
 import Particle from "./Particle";
-import Forces   from "./Forces";
+import Forces   from "./Force";
 
 class Ball extends Particle implements Drawable{
     private radius : number;
@@ -18,7 +18,7 @@ class Ball extends Particle implements Drawable{
         this.color = '#0000ff';
     }
 
-    public onEachStep(dt:number, g: number, k:number) {
+    public onEachStep(dt:number, forcefactors: Forces) {
         /**
          * 1. move object
          * 2. Calculate Force
@@ -26,20 +26,21 @@ class Ball extends Particle implements Drawable{
          * 4. Update Velocity
          */
         
-        var gravitationalForce = Forces.constantGravity(this.mass,g);
-        var airDrag = Forces.linearDrag(this.velo, k);
+        var gravitationalForce = forcefactors.constantGravity(this.mass);
+        var airDrag = forcefactors.linearDrag(this.velo);
 
         var forces = Forces.sum(gravitationalForce, airDrag);
 
-        this.pos.add(this.velo.clone().multiplyScalar(dt));
+
         this.acc = forces.multiplyScalar(1/this.mass);
         this.velo.add(this.acc.clone().multiplyScalar(dt));
+        this.pos.add(this.velo.clone().multiplyScalar(dt));
         
         if (this.pos.y > 500 - this.radius) {
             this.pos.y = 500 - this.radius;
             this.velo.y *= -0.5;
-            
         }
+
         if (this.pos.y < this.radius) {
             this.pos.y = this.radius;
             this.velo.y *= -0.5;

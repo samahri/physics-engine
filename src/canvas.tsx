@@ -9,9 +9,9 @@ class Canvas extends Component {
   componentDidMount() {
     const canvas = this.refs.canvas as HTMLCanvasElement;
     const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-    const bouncingBall:AnimationUniverse = new AnimationUniverse(ctx);
+    const animationUniverse:AnimationUniverse = new AnimationUniverse(ctx);
 
-    bouncingBall.startAnimation();
+    animationUniverse.startAnimation();
   }
   
   render() {
