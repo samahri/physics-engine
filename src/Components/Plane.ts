@@ -1,4 +1,4 @@
-import Drawable from "./drawable";
+import Drawable from "./CanvasDrawable";
 import Ball from './Ball';
 import Vector2D from "./Vector2d";
 

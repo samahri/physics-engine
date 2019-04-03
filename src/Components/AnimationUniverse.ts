@@ -10,11 +10,11 @@ class AnimationUniverse {
     private balls:Ball[] = [];
     private plane:Plane;
     private t0:number = new Date().getTime();
-    private forceFactors:Force;
 
     constructor(context: CanvasRenderingContext2D) {
       this.context = context;
-      this.forceFactors = new Force.Builder().setG(data.g).setK(20).build();
+      Force.setG(data.g);
+      Force.setK(20);
   }
 
   public startAnimation() {
@@ -30,7 +30,7 @@ class AnimationUniverse {
     this.context.clearRect(0, 0, data.canvas.width, data.canvas.height);
 
     for(var i = 0; i < this.balls.length; i++) {
-      this.balls[i].onEachStep(dt, this.forceFactors);
+      this.balls[i].onEachStep(dt);
       this.balls[i].draw(this.context);
     }
 

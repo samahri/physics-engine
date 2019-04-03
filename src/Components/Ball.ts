@@ -1,9 +1,8 @@
-import Drawable from "./drawable";
-import Vector2D from "./Vector2d";
+import CanvasDrawable from "./CanvasDrawable";
 import Particle from "./Particle";
-import Forces   from "./Force";
+import Force   from "./Force";
 
-class Ball extends Particle implements Drawable{
+class Ball extends Particle implements CanvasDrawable{
     private radius : number;
     private color: string;
     
@@ -18,18 +17,12 @@ class Ball extends Particle implements Drawable{
         this.color = '#0000ff';
     }
 
-    public onEachStep(dt:number, forcefactors: Forces) {
-        /**
-         * 1. move object
-         * 2. Calculate Force
-         * 3. Update Acceleration
-         * 4. Update Velocity
-         */
+    public onEachStep(dt:number) {
         
-        var gravitationalForce = forcefactors.constantGravity(this.mass);
-        var airDrag = forcefactors.linearDrag(this.velo);
+        var gravitationalForce = Force.constantGravity(this.mass);
+        var airDrag = Force.linearDrag(this.velo);
 
-        var forces = Forces.sum(gravitationalForce, airDrag);
+        var forces = Force.sum(gravitationalForce, airDrag);
 
 
         this.acc = forces.multiplyScalar(1/this.mass);
@@ -55,6 +48,8 @@ class Ball extends Particle implements Drawable{
             this.pos.x = 700 - this.radius;
             this.velo.x *= -0.5;
         }
+
+        console.log(this.pos);
     }
 
     public draw(context: CanvasRenderingContext2D) {
