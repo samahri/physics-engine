@@ -22,11 +22,7 @@ class Plane implements Drawable{
             this.y1 = y1;
             this.width = width;
         }
-
-    public asVector(): Vector2D {
-        return new Vector2D(this.x1 - this.x0, this.y1 - this.y0);
-    }
-
+        
     public draw(context: CanvasRenderingContext2D): void {
         context.beginPath();
         context.lineWidth = this.width;

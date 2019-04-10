@@ -2,7 +2,8 @@ import CanvasDrawable from "./CanvasDrawable";
 import Particle from "./Particle";
 import Force   from "./Force";
 
-class Ball extends Particle implements CanvasDrawable{
+class Ball extends Particle {
+    
     private radius : number;
     private color: string;
     
@@ -17,39 +18,54 @@ class Ball extends Particle implements CanvasDrawable{
         this.color = '#0000ff';
     }
 
-    public onEachStep(dt:number) {
+    public onEachStep(dt:number, otherObjects:Particle[]) {
         
         var gravitationalForce = Force.constantGravity(this.mass);
         var airDrag = Force.linearDrag(this.velo);
 
         var forces = Force.sum(gravitationalForce, airDrag);
 
-
         this.acc = forces.multiplyScalar(1/this.mass);
         this.velo.add(this.acc.clone().multiplyScalar(dt));
         this.pos.add(this.velo.clone().multiplyScalar(dt));
+
+        otherObjects.forEach(obj => {
+            var ball = obj as Ball;
+            if (this.didCollide(ball)) {
+                var temp = ball.velo.clone().multiplyScalar(ball.mass / this.mass);
+                ball.velo = this.velo.clone().multiplyScalar(this.mass / ball.mass);
+                this.velo = temp;
+            }
+        });
         
         if (this.pos.y > 500 - this.radius) {
             this.pos.y = 500 - this.radius;
-            this.velo.y *= -0.5;
+            this.velo.y *= -1.0;
         }
 
         if (this.pos.y < this.radius) {
             this.pos.y = this.radius;
-            this.velo.y *= -0.5;
+            this.velo.y *= -1.0;
         }
 
         if (this.pos.x < this.radius) {
             this.pos.x = this.radius;
-            this.velo.x *= -0.5;
+            this.velo.x *= -1;
         }
 
         if (this.pos.x > 700 - this.radius) {
             this.pos.x = 700 - this.radius;
-            this.velo.x *= -0.5;
+            this.velo.x *= -1;
         }
+    }
 
-        console.log(this.pos);
+    public didCollide(otherParticle: Particle):boolean {
+        var otherBall = otherParticle as Ball;
+        if (this.pos.clone().subtract(otherBall.pos.clone()).length() <= (this.radius + otherBall.radius)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public draw(context: CanvasRenderingContext2D) {

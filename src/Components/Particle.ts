@@ -20,6 +20,10 @@ abstract class Particle {
         this._mass = mass;
     }
 
+    public abstract onEachStep(dt:number, otherObjects:Particle[]);
+
+    public abstract draw(context: CanvasRenderingContext2D)
+
     get mass() {
         return this._mass;
     }
