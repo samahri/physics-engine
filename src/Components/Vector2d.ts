@@ -56,6 +56,15 @@ class Vector2D {
         return new Vector2D(this._x, this._y);
     }
 
+    public unit(): Vector2D {
+        length = this.length();
+        return this.clone().multiplyScalar(1/length);
+    }
+
+    public angle(): number {
+        return Math.atan2(this.y, this.x);
+    }
+
     public static distance(v1: Vector2D, v2:Vector2D):number {
         return v1.clone().subtract(v2).length();
     }

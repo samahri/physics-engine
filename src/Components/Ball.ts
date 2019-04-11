@@ -32,6 +32,14 @@ class Ball extends Particle {
         otherObjects.forEach(obj => {
             var ball = obj as Ball;
             if (this.didCollide(ball)) {
+                var collisionVector = this.pos.clone().subtract(ball.pos.clone())
+                var collisionVectorDifference = this.radius + ball.radius - collisionVector.length();
+                var collisionAngle = this.pos.clone().subtract(ball.pos.clone()).angle();
+                
+                this.pos.x += collisionVectorDifference * Math.cos(collisionAngle);
+                this.pos.y += collisionVectorDifference * Math.sin(collisionAngle);
+                
+                // need to update the below
                 var temp = ball.velo.clone().multiplyScalar(ball.mass / this.mass);
                 ball.velo = this.velo.clone().multiplyScalar(this.mass / ball.mass);
                 this.velo = temp;
@@ -61,11 +69,7 @@ class Ball extends Particle {
 
     public didCollide(otherParticle: Particle):boolean {
         var otherBall = otherParticle as Ball;
-        if (this.pos.clone().subtract(otherBall.pos.clone()).length() <= (this.radius + otherBall.radius)) {
-            return true;
-        } else {
-            return false;
-        }
+        return (this.pos.clone().subtract(otherBall.pos.clone()).length() <= (this.radius + otherBall.radius));      
     }
 
     public draw(context: CanvasRenderingContext2D) {
