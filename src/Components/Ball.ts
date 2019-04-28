@@ -1,6 +1,7 @@
 import CanvasDrawable from "./CanvasDrawable";
 import Particle from "./Particle";
 import Force   from "./Force";
+import * as math from 'mathjs';
 
 class Ball extends Particle {
     
@@ -18,9 +19,10 @@ class Ball extends Particle {
         this.color = '#0000ff';
     }
 
-    public onEachStep(dt:number, otherObjects:Particle[]) {
+    public onEachStep(dt:number, /** otherObjects:Particle[]*/ ball:Ball) {
         
         var gravitationalForce = Force.constantGravity(this.mass);
+        // console.log(gravitationalForce)
         var airDrag = Force.linearDrag(this.velo);
 
         var forces = Force.sum(gravitationalForce, airDrag);
@@ -29,22 +31,38 @@ class Ball extends Particle {
         this.velo.add(this.acc.clone().multiplyScalar(dt));
         this.pos.add(this.velo.clone().multiplyScalar(dt));
 
-        otherObjects.forEach(obj => {
-            var ball = obj as Ball;
+        // otherObjects.forEach(obj => {
+            // var ball = obj as Ball;
             if (this.didCollide(ball)) {
-                var collisionVector = this.pos.clone().subtract(ball.pos.clone())
+
+                // collision detection adjustment
+                var collisionVector = this.pos.clone().subtract(ball.pos.clone());
                 var collisionVectorDifference = this.radius + ball.radius - collisionVector.length();
                 var collisionAngle = this.pos.clone().subtract(ball.pos.clone()).angle();
                 
-                this.pos.x += collisionVectorDifference * Math.cos(collisionAngle);
-                this.pos.y += collisionVectorDifference * Math.sin(collisionAngle);
+                this.pos.x += (collisionVectorDifference) * Math.cos(collisionAngle);
+                this.pos.y += (collisionVectorDifference) * Math.sin(collisionAngle);
                 
                 // need to update the below
-                var temp = ball.velo.clone().multiplyScalar(ball.mass / this.mass);
-                ball.velo = this.velo.clone().multiplyScalar(this.mass / ball.mass);
-                this.velo = temp;
+                // vector velocities are swapped; invalid answer
+                // var temp = ball.velo.clone().multiplyScalar(ball.mass / this.mass);
+                // ball.velo = this.velo.clone().multiplyScalar(this.mass / ball.mass);
+                // this.velo = temp;
+                var e = 1;
+                const A = [[this.mass, ball.mass], [-1, 1]];
+                const B = [this.mass * this.velo.x + ball.mass * ball.velo.x,
+                this.velo.x - ball.velo.y];
+
+                [this.velo.x, ball.velo.x] = math.usolve(A,B); 
+                // [this.velo.x, ball.velo.x] = [0,0]
+                // this.velo.x = math.usolve(A,B)[0];
+                // ball.velo.x = math.usolve(A,B)[1];
+                console.log(math.usolve(A, B));
+                console.log('x: ' + this.pos.x + ',y: ' + this.pos.y);
+                console.log('ball 2 velo ' + ball.velo.x);
+
             }
-        });
+        // });
         
         if (this.pos.y > 500 - this.radius) {
             this.pos.y = 500 - this.radius;
@@ -69,7 +87,7 @@ class Ball extends Particle {
 
     public didCollide(otherParticle: Particle):boolean {
         var otherBall = otherParticle as Ball;
-        return (this.pos.clone().subtract(otherBall.pos.clone()).length() <= (this.radius + otherBall.radius));      
+        return (this.pos.clone().subtract(otherBall.pos.clone()).length() < (this.radius + otherBall.radius) + 1);      
     }
 
     public draw(context: CanvasRenderingContext2D) {

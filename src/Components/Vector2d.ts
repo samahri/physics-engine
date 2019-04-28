@@ -1,3 +1,5 @@
+import * as math from 'mathjs';
+
 class Vector2D {
 
     private _x: number;
@@ -46,10 +48,13 @@ class Vector2D {
     }
 
     public length(): number {
-        var xSqrd = Math.pow(this._x,2);
-        var ySqrd = Math.pow(this._y,2);
+        let xSqrd = Math.pow(this._x,2);
+        let ySqrd = Math.pow(this._y,2);
 
-        return Math.sqrt(xSqrd + ySqrd);
+        var length = Math.sqrt(xSqrd + ySqrd);
+        var roundedLength = Math.round(length);
+
+        return roundedLength;
     }
 
     public clone(): Vector2D {
@@ -57,12 +62,16 @@ class Vector2D {
     }
 
     public unit(): Vector2D {
-        length = this.length();
-        return this.clone().multiplyScalar(1/length);
+        var length = this.length();
+        let unitVector = this.clone().multiplyScalar(1/length);
+
+        unitVector.x = math.round(unitVector.x, 2);
+        unitVector.y = math.round(unitVector.y, 2);
+        return unitVector;
     }
 
     public angle(): number {
-        return Math.atan2(this.y, this.x);
+        return math.round(Math.atan2(this.y, this.x), 2);
     }
 
     public static distance(v1: Vector2D, v2:Vector2D):number {

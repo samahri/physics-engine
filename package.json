@@ -4,7 +4,7 @@
   "description": "a physics simulation engine on html canvas and javascript",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha -r ts-node/register test/**/*.spec.ts",
     "package": "webpack"
   },
   "author": "Sam Saud Almahri",
@@ -14,6 +14,7 @@
     "@types/react": "^16.8.8",
     "@types/react-dom": "^16.8.3",
     "css-loader": "^2.1.1",
+    "mathjs": "^5.9.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "style-loader": "^0.23.1"
@@ -22,8 +23,13 @@
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
     "@babel/preset-react": "^7.0.0",
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
     "awesome-typescript-loader": "^5.2.1",
     "babel-loader": "^8.0.5",
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "ts-node": "^8.1.0",
     "typescript": "^3.3.4000",
     "typings-for-css-modules-loader": "^1.7.0",
     "webpack": "^4.29.6",

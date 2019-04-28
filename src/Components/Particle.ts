@@ -1,4 +1,5 @@
 import Vector2D from "./Vector2d";
+import Ball from "./Ball";
 
 abstract class Particle {
     protected pos: Vector2D;
@@ -20,7 +21,7 @@ abstract class Particle {
         this._mass = mass;
     }
 
-    public abstract onEachStep(dt:number, otherObjects:Particle[]);
+    public abstract onEachStep(dt:number, /** otherObjects:Particle[]*/ ball:Ball);
 
     public abstract draw(context: CanvasRenderingContext2D)
 

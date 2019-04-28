@@ -1,48 +1,52 @@
-var data = require('../data.json');
-
-import Ball  from "./Ball";
 import Force from "./Force";
 import Plane from "./Plane";
 import Particle from "./Particle";
+import Ball from "./Ball";
 
 class AnimationUniverse {
     private readonly context: CanvasRenderingContext2D;
-    private balls:Particle[] = [];
+    private balls:Ball[] = [];
     private plane:Plane;
     private t0:number = new Date().getTime();
 
     constructor(context: CanvasRenderingContext2D) {
       this.context = context;
-      Force.setG(data.g);
-      Force.setK(100);
+      // 
+      // Force.setK(100);
+  }
+
+  public setG(g : number) {
+    Force.setG(g);
   }
 
   public addParticle(p : Particle) {
-    this.balls.push(p);
+    this.balls.push(p as Ball);
   }
 
-  public startAnimation() {
-    this.balls.push();
-    this.balls.push();
-    // this.plane = new Plane(200, 200, 300, 350, 5);
-    this.doStartAnimation();
+  public startAnimation(height: number, width: number) {
+    this.doStartAnimation(height, width);
   }
 
-  private doStartAnimation() {
+  private doStartAnimation(height: number, width: number) {
     var dt = this.getUpdatedTime();
 
-    this.context.clearRect(0, 0, data.canvas.width, data.canvas.height);
+    this.context.clearRect(0, 0, width, height);
 
-    for(var i = 0; i < this.balls.length; i++) {
-      var otherBalls = [...this.balls];
-      otherBalls.splice(i,1);
-      this.balls[i].onEachStep(dt, otherBalls);
-      this.balls[i].draw(this.context);
-    }
+    // for(var i = 0; i < this.balls.length; i++) {
+    //   var otherBalls = [...this.balls];
+    //   otherBalls.splice(i,1);
+    //   this.balls[i].onEachStep(dt, otherBalls);
+    //   this.balls[i].draw(this.context);
+    // }
+
+    this.balls[0].onEachStep(dt, this.balls[1]);
+    this.balls[1].onEachStep(dt, this.balls[0]);
+    this.balls[0].draw(this.context);
+    this.balls[1].draw(this.context);
 
     // this.plane.draw(this.context);
 
-    window.requestAnimationFrame(() => this.doStartAnimation());
+    window.requestAnimationFrame(() => this.doStartAnimation(height, width));
   }
 
   private getUpdatedTime():number {
