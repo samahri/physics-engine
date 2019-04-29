@@ -20,12 +20,12 @@ class Canvas extends React.Component {
   componentDidMount() {
     const canvas = this.refs.canvas as HTMLCanvasElement;
     const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-    this.animationUniverse = new AnimationUniverse(ctx);
+    this.animationUniverse = new AnimationUniverse(ctx,this.state.canvas.height, this.state.canvas.width);
 
     this.animationUniverse.addParticle(new Ball(45, 200, 455, 80, 0, 45));
     this.animationUniverse.addParticle(new Ball(45, 400, 455, 0, 0, 45));
-    this.animationUniverse.setG(0);
-    this.animationUniverse.startAnimation(this.state.canvas.height, this.state.canvas.width);
+    this.animationUniverse.setG(20);
+    this.animationUniverse.startAnimation();
   }
 
   addBall = (x:number, y:number) => {
@@ -50,7 +50,7 @@ class Canvas extends React.Component {
           className="CanvasElement" 
           width = {this.state.canvas.width} 
           height = {this.state.canvas.height}
-          // onClick = {(event) => this.addBall(event.nativeEvent.offsetX, event.nativeEvent.offsetY)} 
+          onClick = {(event) => this.addBall(event.nativeEvent.offsetX, event.nativeEvent.offsetY)} 
           />
       </div>
     );

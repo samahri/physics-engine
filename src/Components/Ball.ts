@@ -19,53 +19,60 @@ class Ball extends Particle {
         this.color = '#0000ff';
     }
 
-    public onEachStep(dt:number, /** otherObjects:Particle[]*/ ball:Ball) {
+    public onEachStep(dt:number, /** otherObjects:Particle[]*/ ball:Ball, forces: Force) {
         
-        var gravitationalForce = Force.constantGravity(this.mass);
-        // console.log(gravitationalForce)
-        var airDrag = Force.linearDrag(this.velo);
+        var gravitationalForce = forces.constantGravity(this.mass);
+        // var airDrag = Force.linearDrag(this.velo);
 
-        var forces = Force.sum(gravitationalForce, airDrag);
+        var forcesSum = Force.sum(gravitationalForce);
 
-        this.acc = forces.multiplyScalar(1/this.mass);
+        // Newton's second law, a = F / mass
+        this._acc = forcesSum.multiplyScalar(1/this.mass);
+
+        // V = V0 + a * dt
         this.velo.add(this.acc.clone().multiplyScalar(dt));
+
+        // P = P0 + V * dt + 0.5 * a * dt^2, since 0.5 * dt^2 =~ 0, it is removed
         this.pos.add(this.velo.clone().multiplyScalar(dt));
 
         // otherObjects.forEach(obj => {
             // var ball = obj as Ball;
-            if (this.didCollide(ball)) {
+        //     if (this.didCollide(ball)) {
 
-                // collision detection adjustment
-                var collisionVector = this.pos.clone().subtract(ball.pos.clone());
-                var collisionVectorDifference = this.radius + ball.radius - collisionVector.length();
-                var collisionAngle = this.pos.clone().subtract(ball.pos.clone()).angle();
+        //         // collision detection adjustment
+        //         var collisionVector = this.pos.clone().subtract(ball.pos.clone());
+        //         var collisionVectorDifference = this.radius + ball.radius - collisionVector.length();
+        //         var collisionAngle = this.pos.clone().subtract(ball.pos.clone()).angle();
                 
-                this.pos.x += (collisionVectorDifference) * Math.cos(collisionAngle);
-                this.pos.y += (collisionVectorDifference) * Math.sin(collisionAngle);
+        //         this.pos.x += (collisionVectorDifference) * Math.cos(collisionAngle);
+        //         this.pos.y += (collisionVectorDifference) * Math.sin(collisionAngle);
                 
-                // need to update the below
-                // vector velocities are swapped; invalid answer
-                // var temp = ball.velo.clone().multiplyScalar(ball.mass / this.mass);
-                // ball.velo = this.velo.clone().multiplyScalar(this.mass / ball.mass);
-                // this.velo = temp;
-                var e = 1;
-                const A = [[this.mass, ball.mass], [-1, 1]];
-                const B = [this.mass * this.velo.x + ball.mass * ball.velo.x,
-                this.velo.x - ball.velo.y];
+        //         // need to update the below
+        //         // vector velocities are swapped; invalid answer
+        //         // var temp = ball.velo.clone().multiplyScalar(ball.mass / this.mass);
+        //         // ball.velo = this.velo.clone().multiplyScalar(this.mass / ball.mass);
+        //         // this.velo = temp;
+        //         var e = 1;
+        //         const A = [[this.mass, ball.mass], [-1, 1]];
+        //         const B = [this.mass * this.velo.x + ball.mass * ball.velo.x,
+        //         this.velo.x - ball.velo.y];
 
-                [this.velo.x, ball.velo.x] = math.usolve(A,B); 
-                // [this.velo.x, ball.velo.x] = [0,0]
-                // this.velo.x = math.usolve(A,B)[0];
-                // ball.velo.x = math.usolve(A,B)[1];
-                console.log(math.usolve(A, B));
-                console.log('x: ' + this.pos.x + ',y: ' + this.pos.y);
-                console.log('ball 2 velo ' + ball.velo.x);
+        //         [this.velo.x, ball.velo.x] = math.usolve(A,B); 
+        //         // [this.velo.x, ball.velo.x] = [0,0]
+        //         // this.velo.x = math.usolve(A,B)[0];
+        //         // ball.velo.x = math.usolve(A,B)[1];
+        //         console.log(math.usolve(A, B));
+        //         console.log('x: ' + this.pos.x + ',y: ' + this.pos.y);
+        //         console.log('ball 2 velo ' + ball.velo.x);
 
-            }
-        // });
-        
-        if (this.pos.y > 500 - this.radius) {
-            this.pos.y = 500 - this.radius;
+        //     }
+        // // });
+    }
+
+    public checkWallCollision(height: number, width: number) {
+
+        if (this.pos.y > height - this.radius) {
+            this.pos.y = height - this.radius;
             this.velo.y *= -1.0;
         }
 
@@ -79,13 +86,14 @@ class Ball extends Particle {
             this.velo.x *= -1;
         }
 
-        if (this.pos.x > 700 - this.radius) {
-            this.pos.x = 700 - this.radius;
+        if (this.pos.x > width - this.radius) {
+            this.pos.x = width - this.radius;
             this.velo.x *= -1;
         }
+
     }
 
-    public didCollide(otherParticle: Particle):boolean {
+    private didCollide(otherParticle: Particle):boolean {
         var otherBall = otherParticle as Ball;
         return (this.pos.clone().subtract(otherBall.pos.clone()).length() < (this.radius + otherBall.radius) + 1);      
     }

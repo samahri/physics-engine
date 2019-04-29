@@ -8,45 +8,45 @@ class AnimationUniverse {
     private balls:Ball[] = [];
     private plane:Plane;
     private t0:number = new Date().getTime();
+    private forces: Force;
+    private universeHeight: number;
+    private universeWidth: number;
 
-    constructor(context: CanvasRenderingContext2D) {
+    constructor(context: CanvasRenderingContext2D, height, width) {
       this.context = context;
-      // 
-      // Force.setK(100);
+      this.universeHeight = height;
+      this.universeWidth = width;
+      this.forces = new Force();
   }
 
   public setG(g : number) {
-    Force.setG(g);
+    this.forces.setG(g);
   }
 
   public addParticle(p : Particle) {
     this.balls.push(p as Ball);
   }
 
-  public startAnimation(height: number, width: number) {
-    this.doStartAnimation(height, width);
+  public startAnimation() {
+    this.doStartAnimation();
   }
 
-  private doStartAnimation(height: number, width: number) {
+  private doStartAnimation() {
     var dt = this.getUpdatedTime();
 
-    this.context.clearRect(0, 0, width, height);
+    this.context.clearRect(0, 0, this.universeWidth, this.universeHeight);
 
-    // for(var i = 0; i < this.balls.length; i++) {
-    //   var otherBalls = [...this.balls];
-    //   otherBalls.splice(i,1);
-    //   this.balls[i].onEachStep(dt, otherBalls);
-    //   this.balls[i].draw(this.context);
-    // }
-
-    this.balls[0].onEachStep(dt, this.balls[1]);
-    this.balls[1].onEachStep(dt, this.balls[0]);
-    this.balls[0].draw(this.context);
-    this.balls[1].draw(this.context);
+    for(let ball of this.balls) {
+      // var otherBalls = [...this.balls];
+      // otherBalls.splice(i,1);
+      ball.onEachStep(dt, null, this.forces);
+      ball.checkWallCollision(this.universeHeight, this.universeWidth);
+      ball.draw(this.context);
+    }
 
     // this.plane.draw(this.context);
 
-    window.requestAnimationFrame(() => this.doStartAnimation(height, width));
+    window.requestAnimationFrame(() => this.doStartAnimation());
   }
 
   private getUpdatedTime():number {

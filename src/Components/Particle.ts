@@ -1,10 +1,11 @@
 import Vector2D from "./Vector2d";
 import Ball from "./Ball";
+import Force from "./Force";
 
 abstract class Particle {
-    protected pos: Vector2D;
-    protected velo: Vector2D;
-    protected acc:Vector2D;
+    protected _pos: Vector2D;
+    protected _velo: Vector2D;
+    protected _acc:Vector2D;
     private _mass: number;
 
     protected constructor(x: number,
@@ -15,13 +16,19 @@ abstract class Particle {
                 ay: number,
                 mass: number) {
 
-        this.pos = new Vector2D(x, y);
-        this.velo = new Vector2D(vx,vy);
-        this.acc = new Vector2D(ax,ay);
+        this._pos = new Vector2D(x, y);
+        this._velo = new Vector2D(vx,vy);
+        this._acc = new Vector2D(ax,ay);
         this._mass = mass;
     }
 
-    public abstract onEachStep(dt:number, /** otherObjects:Particle[]*/ ball:Ball);
+    public get pos() { return this._pos;}
+
+    public get velo() { return this._velo;}
+
+    public get acc() {return this._acc;}
+
+    public abstract onEachStep(dt:number, /** otherObjects:Particle[]*/ ball:Ball, forces:Force);
 
     public abstract draw(context: CanvasRenderingContext2D)
 

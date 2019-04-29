@@ -1,24 +1,27 @@
 import Vector2D from "./Vector2d";
 
 class Force{
-    private static g = 0;
-    private static k = 0;
+    private g: number;
+    private k: number;
 
-    private constructor(){}
+    public constructor(){
+        this.g = 0;
+        this.k = 0;
+    }
 
-    public static setG(g: number) {
+    public setG(g: number) {
         this.g = g;
     }
 
-    public static setK(k: number) {
+    public setK(k: number) {
         this.k = k;
     }
 
-    public static constantGravity(mass:number): Vector2D {
+    public constantGravity(mass:number): Vector2D {
         return new Vector2D(0, mass * this.g);
     }
 
-    public static linearDrag(velocity: Vector2D): Vector2D {
+    public linearDrag(velocity: Vector2D): Vector2D {
         var force:Vector2D;
         var speed = velocity.length();
 
