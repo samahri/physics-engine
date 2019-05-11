@@ -21,9 +21,18 @@ class Canvas extends React.Component {
     const canvas = this.refs.canvas as HTMLCanvasElement;
     const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
     this.animationUniverse = new AnimationUniverse(ctx,this.state.canvas.height, this.state.canvas.width);
+    var ball1 = 
+      {x: 300,
+        y:  455
+      };
 
-    this.animationUniverse.addParticle(new Ball(45, 200, 455, 80, 0, 45));
-    this.animationUniverse.addParticle(new Ball(45, 400, 455, 0, 0, 45));
+      var ball2 = 
+      {x: 100,
+        y:  455
+      };
+
+    this.animationUniverse.addParticle(new Ball(45, ball1.x, ball1.y, 300, 0, 45));
+    this.animationUniverse.addParticle(new Ball(45, ball2.x, ball2.y, -100, 0, 45));
     this.animationUniverse.setG(20);
     this.animationUniverse.startAnimation();
   }

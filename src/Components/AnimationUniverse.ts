@@ -28,25 +28,30 @@ class AnimationUniverse {
   }
 
   public startAnimation() {
-    this.doStartAnimation();
+
+    this.renderFrame();
+
+    window.requestAnimationFrame(() => this.startAnimation());
   }
 
-  private doStartAnimation() {
+  private renderFrame() {
     var dt = this.getUpdatedTime();
 
     this.context.clearRect(0, 0, this.universeWidth, this.universeHeight);
 
-    for(let ball of this.balls) {
-      // var otherBalls = [...this.balls];
-      // otherBalls.splice(i,1);
+    for(var i = 0; i < this.balls.length; i++) {
+      var ball = this.balls[i];
       ball.onEachStep(dt, null, this.forces);
+      
+      for (var j = i + 1; j < this.balls.length; j++) {
+        var otherBall = this.balls[j];
+        ball.checkObjectCollision(otherBall);
+      }
+
       ball.checkWallCollision(this.universeHeight, this.universeWidth);
       ball.draw(this.context);
     }
-
     // this.plane.draw(this.context);
-
-    window.requestAnimationFrame(() => this.doStartAnimation());
   }
 
   private getUpdatedTime():number {

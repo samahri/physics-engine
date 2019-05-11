@@ -52,7 +52,7 @@ class Vector2D {
         let ySqrd = Math.pow(this._y,2);
 
         var length = Math.sqrt(xSqrd + ySqrd);
-        var roundedLength = Math.round(length);
+        var roundedLength = math.round(length, 2);
 
         return roundedLength;
     }

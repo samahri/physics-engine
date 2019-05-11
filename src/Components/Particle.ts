@@ -28,7 +28,7 @@ abstract class Particle {
 
     public get acc() {return this._acc;}
 
-    public abstract onEachStep(dt:number, /** otherObjects:Particle[]*/ ball:Ball, forces:Force);
+    public abstract onEachStep(dt:number, otherObjects:Particle[], forces:Force);
 
     public abstract draw(context: CanvasRenderingContext2D)
 

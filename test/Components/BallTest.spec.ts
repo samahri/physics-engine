@@ -113,7 +113,98 @@ describe("Testing BallJS", () => {
         })
     })
 
-    describe("When the ball hits a wall or floor, it bounces back", () => {
+    // describe("When the ball hits a wall or floor, it bounces back", () => {
+    //     var radius = 45;
+    //     var mass = 55;
+
+    //     var ballX:number;
+    //     var ballY:number;
+    //     var vx0:number;
+    //     var vy0:number;
+    //     var ball:Ball;
+
+    //     it("when the ball hits the left wall", () => {
+    //         ballX = 40;
+    //         ballY = 300;
+    //         vx0 = -10;
+    //         vy0 = 40;
+           
+    //         ball = new Ball(radius, ballX, ballY, vx0, vy0, mass);
+
+    //         ball.checkWallCollision(700, 500);
+
+    //         expect(ball.pos.x).to.equal(45);
+    //         expect(ball.pos.y).to.equal(300); 
+    //         expect(ball.velo.x).to.equal(10);
+    //         expect(ball.velo.y).to.equal(40);
+    //     })
+
+    //     it("when the ball hits the roof", () => {
+    //         ballX = 412;
+    //         ballY = 44;
+    //         vx0 = -10;
+    //         vy0 = -40;
+           
+    //         ball = new Ball(radius, ballX, ballY, vx0, vy0, mass);
+
+    //         ball.checkWallCollision(700, 500);
+
+    //         expect(ball.pos.x).to.equal(412);
+    //         expect(ball.pos.y).to.equal(45); 
+    //         expect(ball.velo.x).to.equal(-10);
+    //         expect(ball.velo.y).to.equal(40);
+    //     })
+
+    //     it("when the ball hits the right wall", () => {
+    //         ballX = 455.3;
+    //         ballY = 300;
+    //         vx0 = 10;
+    //         vy0 = 40;
+           
+    //         ball = new Ball(radius, ballX, ballY, vx0, vy0, mass);
+
+    //         ball.checkWallCollision(700, 500);
+
+    //         expect(ball.pos.x).to.equal(455);
+    //         expect(ball.pos.y).to.equal(300); 
+    //         expect(ball.velo.x).to.equal(-10);
+    //         expect(ball.velo.y).to.equal(40);
+    //     })
+
+    //     it("when the ball hits the floor", () => {
+    //         ballX = 255.3;
+    //         ballY = 655.1;
+    //         vx0 = 10;
+    //         vy0 = 40;
+           
+    //         ball = new Ball(radius, ballX, ballY, vx0, vy0, mass);
+
+    //         ball.checkWallCollision(700, 500);
+
+    //         expect(ball.pos.x).to.equal(255.3);
+    //         expect(ball.pos.y).to.equal(655); 
+    //         expect(ball.velo.x).to.equal(10);
+    //         expect(ball.velo.y).to.equal(-40);
+    //     })
+
+    //     it("when the ball doesn't hit any wall", () => {
+    //         ballX = 445;
+    //         ballY = 300;
+    //         vx0 = -10;
+    //         vy0 = 40;
+           
+    //         ball = new Ball(radius, ballX, ballY, vx0, vy0, mass);
+
+    //         ball.checkWallCollision(700, 500);
+
+    //         expect(ball.pos.x).to.equal(445);
+    //         expect(ball.pos.y).to.equal(300); 
+    //         expect(ball.velo.x).to.equal(-10);
+    //         expect(ball.velo.y).to.equal(40);
+    //     })
+    // })
+
+    describe("when two balls collide", () => {
         var radius = 45;
         var mass = 55;
 
@@ -123,84 +214,33 @@ describe("Testing BallJS", () => {
         var vy0:number;
         var ball:Ball;
 
-        it("when the ball hits the left wall", () => {
-            ballX = 40;
-            ballY = 300;
-            vx0 = -10;
-            vy0 = 40;
-           
+        var otherBallX:number;
+        var otherBallY:number;
+        var otherBallvx0:number;
+        var otherBallvy0:number;
+        var otherBall:Ball;
+
+        it("the two objects must touching at a single point", () => {
+            ballX = 100;
+            ballY = 200;
+            vx0 = 0;
+            vy0 = 0;
             ball = new Ball(radius, ballX, ballY, vx0, vy0, mass);
 
-            ball.checkWallCollision(700, 500);
+            otherBallX = 128.28;
+            otherBallY = 228.28;
+            otherBallvx0 = 0;
+            otherBallvy0 = 0;
+            otherBall = new Ball(radius, otherBallX, otherBallY, otherBallvx0, otherBallvy0, mass);
 
-            expect(ball.pos.x).to.equal(45);
-            expect(ball.pos.y).to.equal(300); 
-            expect(ball.velo.x).to.equal(10);
-            expect(ball.velo.y).to.equal(40);
-        })
+            var distanceVector = otherBall.pos.clone().subtract(ball.pos.clone());
 
-        it("when the ball hits the roof", () => {
-            ballX = 412;
-            ballY = 44;
-            vx0 = -10;
-            vy0 = -40;
-           
-            ball = new Ball(radius, ballX, ballY, vx0, vy0, mass);
+            // when
+            ball.checkObjectCollision(otherBall);
 
-            ball.checkWallCollision(700, 500);
-
-            expect(ball.pos.x).to.equal(412);
-            expect(ball.pos.y).to.equal(45); 
-            expect(ball.velo.x).to.equal(-10);
-            expect(ball.velo.y).to.equal(40);
-        })
-
-        it("when the ball hits the right wall", () => {
-            ballX = 455.3;
-            ballY = 300;
-            vx0 = 10;
-            vy0 = 40;
-           
-            ball = new Ball(radius, ballX, ballY, vx0, vy0, mass);
-
-            ball.checkWallCollision(700, 500);
-
-            expect(ball.pos.x).to.equal(455);
-            expect(ball.pos.y).to.equal(300); 
-            expect(ball.velo.x).to.equal(-10);
-            expect(ball.velo.y).to.equal(40);
-        })
-
-        it("when the ball hits the floor", () => {
-            ballX = 255.3;
-            ballY = 655.1;
-            vx0 = 10;
-            vy0 = 40;
-           
-            ball = new Ball(radius, ballX, ballY, vx0, vy0, mass);
-
-            ball.checkWallCollision(700, 500);
-
-            expect(ball.pos.x).to.equal(255.3);
-            expect(ball.pos.y).to.equal(655); 
-            expect(ball.velo.x).to.equal(10);
-            expect(ball.velo.y).to.equal(-40);
-        })
-
-        it("when the ball doesn't hit any wall", () => {
-            ballX = 445;
-            ballY = 300;
-            vx0 = -10;
-            vy0 = 40;
-           
-            ball = new Ball(radius, ballX, ballY, vx0, vy0, mass);
-
-            ball.checkWallCollision(700, 500);
-
-            expect(ball.pos.x).to.equal(445);
-            expect(ball.pos.y).to.equal(300); 
-            expect(ball.velo.x).to.equal(-10);
-            expect(ball.velo.y).to.equal(40);
+            expect(ball.pos.x).to.equal(ballX - distanceVector.x);
+            expect(ball.pos.y).to.equal(ballY - distanceVector.y);
+            
         })
     })
 })
